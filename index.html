@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Materials</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <button class="toggle-btn"id="toggle-btn" onclick="toggleSidebar()">></button>
+   <!---- <input type="checkbox" style="appearance: none;">
+    <div class="toggle">
+        <span class="tline common"></span>
+        <span class="mline common"></span>
+        <span class="bline common"></span>
+    </div>--->
+<div class="sidebar" id="sidebar">
+    <div class="dropdown">
+        <a class="dropdown-btn" onclick="toggleDropdown('btech')">B.Tech</a>
+        <div class="dropdown-content" id="btech">
+            <a href="btech-cse.html">Computer Science And Business Studies</a>
+            <a href="btech-ece.html">Artificial Intelligence And Data Science</a>
+            <a href="btech-mech.html">Petroleum Engineering</a>
+            <a>Petrochemical Engineering</a>
+            <a>Foot Engineering</a>
+            <a>Bio Tech and Bio Chemical Engineering</a>
+        </div>
+    </div>
+    <div class="dropdown">
+        <a class="dropdown-btn" onclick="toggleDropdown('be')">B.E</a>
+        <div class="dropdown-content" id="be">
+            <a href="be-civil.html">Civil Engineering</a>
+            <a href="be-electrical.html">Electrical and Electronic Engineering</a>
+            <a href="be-it.html">Electrical and Communication Engineering</a>
+            <a>Mechanical Engineering</a>
+            <a>Computer Science Engineering</a>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <h1>Welcome to Study Materials</h1>
+    <p>Select a subject from the sidebar to view study materials.</p>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
