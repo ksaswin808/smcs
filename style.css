@@ -7,10 +7,10 @@ body {
 }
 .sidebar {
     position: fixed;
-    left: -250px;
+    left: -240px;
     top: 0;
     height: 100%;
-    width: 250px;
+    width: 270px;
     background:#11101d;
     text-decoration-color: #111;
     box-shadow: 0px 0px 10px rgba(0,0,0,5);
@@ -20,7 +20,6 @@ body {
     z-index: 1;
     border-radius: 8px;
     transition-timing-function: ease-in-out;
-    
 }
 .sidebar a {
     padding: 15px;
@@ -33,17 +32,22 @@ body {
 }
 .toggle-btn {
     position: fixed;
-    top: 10px;
-    left: 0;
-   background-color: #111;
-    color: white;
+    top: 0px;
+    left:-2px;
+    background-color: #2CFF05;
+    background-image: url('Arrowleft.png') no-repeat center;
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+    /*color: white;*/
     border: none;
-    padding: 10px;
+    /*padding: 10px;*/
     cursor: pointer;
     transition: left 0.3s;
     z-index: 2;
     transition-timing-function: ease-in-out;
-    border-radius: 4px;
+    border-radius: 20px;
+    margin-top: 10px;
 }
 .main-content {
     display:block;
@@ -58,26 +62,28 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: opacity 0.3s ease-in-out,max-height 0.3s ease-in-out;
-    
 }
 .dropdown-content a {
-    padding-left: 30px;
-    border-radius: 2px;
+    padding-left: 20px;
+    width: 200px;
+    border-radius: 8px;
     background-color: #222;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
 }
 .dropdown-content.show {
     display: block;
     opacity: 1;
     max-height: 500px;
     transform: translateY(0);
-    transition: transform 0.3s ease,opacity 0.3s ease;
+    transition: transform 0.3s ease-in-out,opacity 0.3s ease-in-out;
 }
 .dropdown-btn {
     cursor: pointer;
     display: flex;
     color: #fff;
     border-radius:12px ;
+    width: 210px;
+
 }
 .dropdown-btn:hover{
     color: #11101d;
@@ -86,8 +92,10 @@ body {
 .dropdown-content a:hover{
     display: block;
     padding: 20px;
+    margin-top: 5px;
     text-decoration: none;
     transition: transform 0.3s ease-in-out;
-    transform: translateY(-10px);
+    transform: translateY(-5px);
     border-radius: 12px;
 }
+

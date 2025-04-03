@@ -1,14 +1,15 @@
 function toggleSidebar() {
     var sidebar = document.getElementById('sidebar');
     var button = document.getElementById('toggle-btn');
-    if (sidebar.style.left === '-250px') {
-        sidebar.style.left = '0';
+    if (sidebar.style.left === '-240px'||sidebar.style.left==='') {
+        button.style.backgroundImage="url('Arrowleft.jpg')";
+        sidebar.style.left = '10px';
         button.style.left = '250px';
-        button.textContent="<";
+            button.style.backgroundImage="url('Arrowleft.png')";
     } else {
-        sidebar.style.left = '-250px';
-        button.style.left = '0';
-        button.textContent=">";
+        sidebar.style.left = '-240px';
+        button.style.left = '0px';
+       button.style.backgroundImage="url('Arrowright.png')";
     }
 }
 
