@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background: #333;
+    color: #fff;
+}
+#home
+{
+    position: fixed;
+    top: 10px;
+    left: 20px;
+    background:url(Home.png);
+}
+.navigation{
+    display: flex;
+    position: fixed;
+    background-color:black;
+    text-decoration: none;
+    width: 100%;
+    height: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+#upload{
+    position: fixed;
+    background-color: #2CFF05;
+    border: none;
+    border-radius: 4px;
+    top: 10px;
+    right: 20px;
+    width: 100px;
+    height: 35px;
+    cursor: pointer;
+}
+#upload:hover{
+    transform: scale(1.1);
+    background-color: #22cc04;
+}
+header{
+    display:block;
+    padding: 50px;
+    text-align-last: center
+}
+#materials{
+    width: 90%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: linear-gradient(to bottom,#688fe5,#95e4e5);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+#listhead{
+    text-align: center;
+    font-size: 30px;
+    color:#fff;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+#file-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 500px auto 0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#file-list li{
+    background:  rgba(255, 255, 255, 0.2);
+    margin: 8px 0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 18px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+#file-list li:hover{
+    background: rgba(255, 255, 255, 0.4);
+}
+#file-list li::before{
+    content: counter(item)". ";
+    counter-increment: item;
+    margin-right: 10px;
+    font-weight: bold;
+}
+#file-list{
+    counter-reset: item;
+}
+@media (max-width: 600px){
+    header{
+        display:block;
+        padding: 30px;
+        text-align-last: center;
+    }
+    #materials{
+        width: 80%;
+        max-width: 500px;
+    }
+    #file-list{
+        width: 100%;
+    }
+    #file-list li{
+        font-size: 16px;
+        padding: 12px 16px;
+    }
+}
