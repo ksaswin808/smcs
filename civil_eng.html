@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civil Engineering</title>
+    <link rel="stylesheet" href="csb.css">
+</head>
+<body>
+    <nav>
+        <div class="navigation">
+         <a href="index.html" id="home"><img src="Home.png" height="30px" width="35px"></a>
+         <button onclick="window.location.href='upload.html?folder=1jmTyIAClAvl0plgAgudgxnNGSHMdEgan'" id="upload">Upload File</button>
+        </div>
+    </nav>
+    
+    <header>
+        <h1>Civil Engineering</h1>
+    </header>
+    
+    <section id="materials">
+        <h2 id="listhead">Study Materials</h2>
+        <ul id="file-list">
+                <!-- Files will be listed here dynamically -->
+        </ul>
+    </section>
+    
+    <script>
+        const folderId = "1jmTyIAClAvl0plgAgudgxnNGSHMdEgan"; // Folder ID for Civil Engineering
+        const apiKey = "AIzaSyCXBycObKNewZ0R4nfd1asodxbwRMGVH7Q";
+
+        async function fetchFiles() {
+            try {
+                const response = await fetch(
+                    `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}`
+                );
+                const data = await response.json();
+                const fileList = document.getElementById("file-list");
+                fileList.innerHTML = "";
+
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        let li = document.createElement("li");
+                        li.innerHTML = `<a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">${file.name}</a>`;
+                        fileList.appendChild(li);
+                    });
+                } else {
+                    fileList.innerHTML = "<li>No files available.</li>";
+                }
+            } catch (error) {
+                console.error("Error fetching files:", error);
+                document.getElementById("file-list").innerHTML = "<li>Error loading files.</li>";
+            }
+        }
+
+        fetchFiles();
+    </script>
+</body>
+</html>
