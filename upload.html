@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload PDF</title>
+</head>
+<body>
+  <h2>Upload PDF (CSBS)</h2>
+  <form id="uploadForm">
+    <input type="file" id="fileInput" accept="application/pdf" required />
+    <button type="submit">Upload PDF</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwYInTpoEngWMq-U8x_iRhAcmPG0C-mtcIGs79FjeYWIRFvoaANxkYEpWuqVoodTpKT/exec"; // Replace with your deployed Apps Script URL
+    const folderId = new URLSearchParams(window.location.search).get("folder");
+
+    document.getElementById("uploadForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const file = document.getElementById("fileInput").files[0];
+      if (!file || !folderId) {
+        document.getElementById("status").textContent = "Missing file or folder ID.";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function () {
+        const base64String = reader.result.split(",")[1];
+
+        const formData = new URLSearchParams();
+        formData.append("folder", folderId);
+        formData.append("filename", file.name);
+        formData.append("mimeType", file.type);
+        formData.append("base64", base64String);
+
+        try {
+          const response = await fetch(scriptURL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData.toString(),
+          });
+          const text = await response.text();
+          document.getElementById("status").textContent = text;
+        } catch (err) {
+          document.getElementById("status").textContent = "Upload failed: " + err.message;
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
