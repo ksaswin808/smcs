@@ -5,13 +5,68 @@
   <title>Upload PDF</title>
 </head>
 <body>
-  <h2>Upload PDF (CSBS)</h2>
+  <h1>Upload PDF (CSBS)</h1>
   <form id="uploadForm">
     <input type="file" id="fileInput" accept="application/pdf" required />
     <button type="submit">Upload PDF</button>
   </form>
   <p id="status"></p>
-
+  <style>
+    body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #333;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    }
+    #uploadForm{
+    position: relative;
+    background:#222;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 300px;
+    height: 150px;
+    }
+    button{
+    background:#2CFF05;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    cursor: pointer;
+    font-size: 16px;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    padding: 5px;
+    transform: translateX(-50%);
+    color: #fff;
+    }
+    #fileInput{
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    border: #333;
+    padding: 10px;
+    font-size: 18px;
+    width: 290px;
+    background: lightgreen;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+    h1{
+      display:block;
+      position: absolute;
+      padding: 50px;
+      text-align-last: center;
+      top:20px;
+    }
+  </style>
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwYInTpoEngWMq-U8x_iRhAcmPG0C-mtcIGs79FjeYWIRFvoaANxkYEpWuqVoodTpKT/exec"; // Replace with your deployed Apps Script URL
     const folderId = new URLSearchParams(window.location.search).get("folder");
