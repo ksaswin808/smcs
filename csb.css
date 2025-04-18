@@ -80,6 +80,15 @@ header{
     font-weight: 500;
     transition: background 0.3s;
 }
+#file-list li a{
+    color: white;
+    text-decoration: none;
+    flex-grow: 1;
+}
+#file-list li a:hover{
+    text-decoration: underline;
+}
+
 #file-list li:hover{
     background: rgba(255, 255, 255, 0.4);
 }
