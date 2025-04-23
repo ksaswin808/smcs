@@ -26,34 +26,30 @@
     </section>
     
     <script>
-        const folderId = "1FlYEqz6paKjlWZnhefaZOodulMGP9_Ry"; // Folder ID for ECE
-        const apiKey = "AIzaSyCXBycObKNewZ0R4nfd1asodxbwRMGVH7Q";
-
-        async function fetchFiles() {
-            try {
-                const response = await fetch(
-                    `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}`
-                );
-                const data = await response.json();
-                const fileList = document.getElementById("file-list");
-                fileList.innerHTML = "";
-
-                if (data.files && data.files.length > 0) {
-                    data.files.forEach(file => {
-                        let li = document.createElement("li");
-                        li.innerHTML = `<a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">${file.name}</a>`;
-                        fileList.appendChild(li);
-                    });
-                } else {
-                    fileList.innerHTML = "<li>No files available.</li>";
-                }
-            } catch (error) {
-                console.error("Error fetching files:", error);
-                document.getElementById("file-list").innerHTML = "<li>Error loading files.</li>";
+        const folderId = "1FlYEqz6paKjlWZnhefaZOodulMGP9_Ry"; // Example: 1jmTyIAClAvl0plgAgudgxnNGSHMdEgan
+        const apiURL = "https://round-recipe-9f0b.mastermirash1.workers.dev";
+      
+        fetch(`${apiURL}?folder=${folderId}`)
+          .then(response => response.json())
+          .then(data => {
+            const fileList = document.getElementById("file-list");
+            fileList.innerHTML = "";
+      
+            if (data.files && data.files.length > 0) {
+              data.files.forEach(file => {
+                const li = document.createElement("li");
+                li.innerHTML = `<a href="${file.url}" target="_blank">${file.name}</a>`;
+                fileList.appendChild(li);
+              });
+            } else {
+              fileList.innerHTML = "<li>No files available.</li>";
             }
-        }
-
-        fetchFiles();
-    </script>
+          })
+          .catch(error => {
+            console.error("Error fetching files:", error);
+            document.getElementById("file-list").innerHTML = "<li>Error loading files.</li>";
+          });
+      </script>
+      
 </body>
 </html>
