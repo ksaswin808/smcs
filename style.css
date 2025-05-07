@@ -3,7 +3,11 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: "Poppins", sans-serif;
-    background: linear-gradient(#F1FAFF,#CBE4FF);
+    background:linear-gradient(to bottom, #7ec3f3,#6593f8);
+    background-image: url(enjoy\ Every\ Moment.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 .sidebar {
     position: fixed;
@@ -11,8 +15,11 @@ body {
     top: 0;
     height: 100%;
     width: 270px;
-    background:#11101d;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+   /* background: 	#1e1e1e;*/
     text-decoration-color: #111;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0px 0px 10px rgba(0,0,0,5);
     padding-top: 20px;
     color: white;
@@ -24,17 +31,18 @@ body {
 .sidebar a {
     padding: 15px;
     text-decoration: none;
-    color: white;
+    color:#ffffff;
+    background: transparent;
     display: block;
 }
 .sidebar a:hover {
-    background-color: #575757;
+    background-color: 	#7ec3f3;
 }
 .toggle-btn {
     position: fixed;
     top: 0px;
     left:-2px;
-    background-color: #2CFF05;
+    background-color: #94ebef;
     background-image: url('Arrowleft.png') no-repeat center;
     background-size: cover;
     width: 25px;
@@ -53,6 +61,7 @@ body {
     display:block;
     padding: 50px;
     text-align-last: center;
+    color: #ffffff;
 }
 .dropdown-content {
     display: grid;
@@ -67,7 +76,7 @@ body {
     padding-left: 20px;
     width: 200px;
     border-radius: 8px;
-    background-color: #222;
+    background-color: transparent;
     transition: all 0.2s ease-in-out;
 }
 .dropdown-content.show {
