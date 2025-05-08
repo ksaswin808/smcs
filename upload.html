@@ -10,7 +10,7 @@
     <h1>Upload PDF (CSBS)</h1>
     <form id="uploadForm">
       <!-- Hidden original file input -->
-      <input type="file" id="fileInput" accept="application/pdf" required style="display: none;" />
+      <input type="file" id="fileInput" accept=".pdf,application/pdf" required style="display: none;" />
       
       <!-- Custom styled label that triggers the file input -->
       <label for="fileInput" class="file-input-label">
@@ -21,8 +21,8 @@
       <!-- File name display -->
       <div id="selectedFileName" class="selected-file">No file selected</div>
       
-      <p id="uploadHint">Only PDF Files</p>
-      <button type="submit">Upload PDF</button>
+      <p id="uploadHint">Only PDF Files Accepted (.pdf)</p>
+      <button type="submit" id="submitButton" disabled>Upload PDF</button>
     </form>
     
     <!-- Enhanced status container -->
@@ -108,9 +108,15 @@
       transition: all 0.3s;
     }
 
-    button:hover {
+    button:hover:not([disabled]) {
       background: #7ad7db;
       box-shadow: 0 0 15px rgba(0, 0, 0, .2);
+    }
+    
+    button[disabled] {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.7;
     }
 
     /* Material Design style for file input */
@@ -243,14 +249,35 @@
   <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbwYInTpoEngWMq-U8x_iRhAcmPG0C-mtcIGs79FjeYWIRFvoaANxkYEpWuqVoodTpKT/exec"; // Replace with your deployed Apps Script URL
     const folderId = new URLSearchParams(window.location.search).get("folder");
+    const submitButton = document.getElementById("submitButton");
 
-    // Display the selected file name
+    // Check if the file is a PDF
+    function isPDF(file) {
+      return file && 
+             (file.type === 'application/pdf' || 
+              file.name.toLowerCase().endsWith('.pdf'));
+    }
+
+    // Display the selected file name and validate
     document.getElementById("fileInput").addEventListener("change", function() {
       const selectedFileName = document.getElementById("selectedFileName");
-      if (this.files && this.files[0]) {
-        selectedFileName.textContent = this.files[0].name;
+      const file = this.files[0];
+      
+      if (file) {
+        if (isPDF(file)) {
+          selectedFileName.textContent = file.name;
+          selectedFileName.style.color = "#fff";
+          submitButton.disabled = false;
+        } else {
+          selectedFileName.textContent = "Invalid file type. Please select a PDF file.";
+          selectedFileName.style.color = "#ff6b6b";
+          submitButton.disabled = true;
+          this.value = ''; // Clear the file input
+        }
       } else {
         selectedFileName.textContent = "No file selected";
+        selectedFileName.style.color = "#fff";
+        submitButton.disabled = true;
       }
     });
 
@@ -287,17 +314,28 @@
       e.preventDefault();
 
       const file = document.getElementById("fileInput").files[0];
-      if (!file || !folderId) {
-        showStatus("Missing file or folder ID.", "error");
+      if (!file) {
+        showStatus("Please select a PDF file.", "error");
+        return;
+      }
+      
+      // Double-check that it's a PDF
+      if (!isPDF(file)) {
+        showStatus("Only PDF files are accepted.", "error");
+        return;
+      }
+
+      if (!folderId) {
+        showStatus("Missing folder ID.", "error");
         return;
       }
 
       // Show uploading status
-      showStatus("Preparing to upload file...", "info", 15);
+      showStatus("Preparing to upload PDF file...", "info", 15);
       
       const reader = new FileReader();
       reader.onload = async function () {
-        showStatus("Reading file and preparing data...", "info", 30);
+        showStatus("Reading PDF file and preparing data...", "info", 30);
         
         const base64String = reader.result.split(",")[1];
 
@@ -308,7 +346,7 @@
         formData.append("base64", base64String);
 
         try {
-          showStatus("Uploading to server...", "info", 60);
+          showStatus("Uploading PDF to server...", "info", 60);
           
           const response = await fetch(scriptURL, {
             method: "POST",
@@ -324,6 +362,10 @@
           
           if (text.toLowerCase().includes("success") || response.ok) {
             showStatus(text, "success", 100);
+            // Reset form after successful upload
+            document.getElementById("fileInput").value = '';
+            document.getElementById("selectedFileName").textContent = "No file selected";
+            submitButton.disabled = true;
           } else {
             showStatus(text, "error", 100);
           }
@@ -335,12 +377,35 @@
       reader.onprogress = function(event) {
         if (event.lengthComputable) {
           const percentLoaded = Math.round((event.loaded / event.total) * 25); // Max 25% for file reading
-          showStatus("Reading file...", "info", percentLoaded);
+          showStatus("Reading PDF file...", "info", percentLoaded);
         }
       };
       
       reader.readAsDataURL(file);
     });
+    
+    // Prevent drag and drop of non-PDF files
+    ['dragenter', 'dragover', 'drop'].forEach(eventName => {
+      document.body.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+    
+    document.body.addEventListener('drop', (e) => {
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        const file = files[0];
+        if (isPDF(file)) {
+          document.getElementById('fileInput').files = files;
+          // Trigger the change event
+          const event = new Event('change');
+          document.getElementById('fileInput').dispatchEvent(event);
+        } else {
+          showStatus("Only PDF files are accepted.", "error");
+        }
+      }
+    }, false);
   </script>
 </body>
 </html>
