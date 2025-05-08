@@ -2,162 +2,167 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Upload PDF</title>
 </head>
 <body>
-  <h1>Upload PDF (CSBS)</h1>
-  <form id="uploadForm">
-    <!-- Hidden original file input -->
-    <input type="file" id="fileInput" accept="application/pdf" required style="display: none;" />
+  <div class="container">
+    <h1>Upload PDF (CSBS)</h1>
+    <form id="uploadForm">
+      <!-- Hidden original file input -->
+      <input type="file" id="fileInput" accept="application/pdf" required style="display: none;" />
+      
+      <!-- Custom styled label that triggers the file input -->
+      <label for="fileInput" class="file-input-label">
+        <span class="file-icon">📄</span>
+        <span class="browse-text">Browse PDF</span>
+      </label>
+      
+      <!-- File name display -->
+      <div id="selectedFileName" class="selected-file">No file selected</div>
+      
+      <p id="uploadHint">Only PDF Files</p>
+      <button type="submit">Upload PDF</button>
+    </form>
     
-    <!-- Custom styled label that triggers the file input -->
-    <label for="fileInput" class="file-input-label">
-      <span class="file-icon">📄</span>
-      <span class="browse-text">Browse PDF</span>
-    </label>
-    
-    <!-- File name display -->
-    <div id="selectedFileName" class="selected-file">No file selected</div>
-    
-    <p id="uloadHint">Only PDF Files</p>
-    <button type="submit">Upload PDF</button>
-  </form>
-  
-  <!-- Enhanced status container -->
-  <div id="statusContainer" class="status-container">
-    <div id="status" class="status-message"></div>
-    <div class="status-progress-container">
-      <div id="statusProgress" class="status-progress"></div>
+    <!-- Enhanced status container -->
+    <div id="statusContainer" class="status-container">
+      <div id="status" class="status-message"></div>
+      <div class="status-progress-container">
+        <div id="statusProgress" class="status-progress"></div>
+      </div>
     </div>
   </div>
   
   <style>
-    body{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: #333;
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    h1{
-      position: absolute;
-      padding: 50px;
-      text-align-last: center;
-      top: 100px;
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #333;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+      padding: 20px;
     }
-    #uloadHint{
-      position: absolute;
-      top: 58%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: clamp(24px, 5vw, 32px);
+    }
+
+    #uploadForm {
+      position: relative;
+      background: linear-gradient(to bottom, #688fe5, #95e4e5);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #uploadHint {
       color: #fff;
       font-size: 16px;
       text-align: center;
+      margin: 15px 0;
     }
-    #uploadForm{
-    position: relative;
-    background: linear-gradient(to bottom,#688fe5,#95e4e5);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    width: 600px;
-    height: 350px;
+
+    button {
+      background: #94ebef;
+      border: none;
+      outline: none;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+      cursor: pointer;
+      font-size: clamp(14px, 4vw, 16px);
+      width: 90%;
+      max-width: 400px;
+      padding: clamp(15px, 3vw, 25px);
+      margin-top: 20px;
+      color: #333;
+      font-weight: 500;
+      transition: all 0.3s;
     }
-    button{
-    background:#94ebef;
-    border: none;
-    outline: none;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,.1);
-    cursor: pointer;
-    font-size: 16px;
-    position: absolute;
-    width: 400px;
-    bottom: 20px;
-    left: 50%;
-    padding: 25px;
-    transform: translateX(-50%);
-    color: #333;
-    font-weight: 500;
-    transition: all 0.3s;
-    }
-    
+
     button:hover {
       background: #7ad7db;
-      box-shadow: 0 0 15px rgba(0,0,0,.2);
+      box-shadow: 0 0 15px rgba(0, 0, 0, .2);
     }
-    
+
     /* Material Design style for file input */
     .file-input-label {
-      position: absolute;
-      left: 50%;
-      top: 40%;
-      transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 500px;
-      padding: 15px;
+      width: 90%;
+      max-width: 500px;
+      padding: clamp(10px, 3vw, 15px);
+      margin: 20px 0;
       background: #94ebef;
       border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       cursor: pointer;
       color: #333;
       font-weight: 500;
       transition: all 0.3s;
-      font-size: 18px;
+      font-size: clamp(14px, 4vw, 18px);
     }
-    
+
     .file-input-label:hover {
       background: #7ad7db;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     }
-    
+
     .file-input-label:active {
-      transform: translate(-50%, -49%);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transform: translateY(1px);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
-    
+
     .file-icon {
-      font-size: 22px;
+      font-size: clamp(18px, 5vw, 22px);
       margin-right: 10px;
     }
-    
+
     .selected-file {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-top: 10px;
+      margin: 10px 0;
       color: #fff;
       font-size: 14px;
       text-align: center;
-      max-width: 500px;
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      padding: 0 15px;
     }
-    
-    h1{
-      display:block;
-      position: absolute;
-      padding: 50px;
-      text-align-last: center;
-      top:20px;
-    }
-    
+
     /* Status message styling */
     .status-container {
-      position: absolute;
-      bottom: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      max-width: 90%;
+      width: 100%;
+      max-width: 600px;
       background: rgba(0, 0, 0, 0.6);
       border-radius: 8px;
       padding: 15px;
@@ -165,28 +170,29 @@
       transition: all 0.3s ease;
       opacity: 0;
       visibility: hidden;
+      margin-top: 20px;
     }
-    
+
     .status-container.active {
       opacity: 1;
       visibility: visible;
     }
-    
+
     .status-message {
       text-align: center;
-      font-size: 16px;
+      font-size: clamp(14px, 4vw, 16px);
       margin-bottom: 10px;
       color: #fff;
       font-weight: 500;
     }
-    
+
     .status-progress-container {
       height: 5px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 3px;
       overflow: hidden;
     }
-    
+
     .status-progress {
       height: 100%;
       width: 0%;
@@ -194,18 +200,44 @@
       border-radius: 3px;
       transition: width 0.5s ease-in-out;
     }
-    
+
     /* Status types */
     .status-success .status-message {
       color: #94ebef;
     }
-    
+
     .status-error .status-message {
       color: #ff6b6b;
     }
-    
+
     .status-info .status-message {
       color: #ffcc5c;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      #uploadForm {
+        padding: 15px;
+        min-height: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      button {
+        padding: 15px;
+      }
+      
+      .file-input-label {
+        padding: 12px;
+      }
+      
+      #uploadHint {
+        font-size: 14px;
+      }
     }
   </style>
   <script>
