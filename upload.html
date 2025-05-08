@@ -23,6 +23,7 @@
       
       <p id="uploadHint">Only PDF Files Accepted (.pdf)</p>
       <button type="submit" id="submitButton" disabled>Upload PDF</button>
+      <button type="button" id="renameButton" style="display: none; margin-top: 10px; background: #ffcc5c;">Rename & Upload</button>
     </form>
     
     <!-- Enhanced status container -->
@@ -247,7 +248,16 @@
     }
   </style>
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwYInTpoEngWMq-U8x_iRhAcmPG0C-mtcIGs79FjeYWIRFvoaANxkYEpWuqVoodTpKT/exec"; // Replace with your deployed Apps Script URL
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwvQpmWt5ilSc3U_12Hus86_MAQKNY6Jsg4OTnjz104veFyyDQTi1D188fnWearpWjmMA/exec"; // Replace with your deployed Apps Script URL
+    
+    // Add a timestamp to the filename to avoid conflicts
+    function getTimestampedFilename(filename) {
+      const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
+      const nameParts = filename.split('.');
+      const extension = nameParts.pop();
+      const baseName = nameParts.join('.');
+      return `${baseName}_${timestamp}.${extension}`;
+    }
     const folderId = new URLSearchParams(window.location.search).get("folder");
     const submitButton = document.getElementById("submitButton");
 
@@ -309,6 +319,19 @@
         }, 5000);
       }
     }
+    
+    // Function to check if file already exists
+    async function checkFileExists(filename, folder) {
+      try {
+        const checkUrl = `${scriptURL}?action=checkFile&filename=${encodeURIComponent(filename)}&folder=${encodeURIComponent(folder)}`;
+        const response = await fetch(checkUrl);
+        const result = await response.json();
+        return result.exists;
+      } catch (error) {
+        console.error("Error checking file existence:", error);
+        return false; // Assume file doesn't exist if check fails
+      }
+    }
 
     document.getElementById("uploadForm").addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -328,6 +351,20 @@
       if (!folderId) {
         showStatus("Missing folder ID.", "error");
         return;
+      }
+      
+      // Check if file already exists in the cloud storage
+      showStatus("Checking if file already exists...", "info", 10);
+      const fileExists = await checkFileExists(file.name, folderId);
+      
+      if (fileExists) {
+        showStatus("A file with this name already exists. You can rename it automatically or select a different file.", "error");
+        // Show rename button
+        document.getElementById("renameButton").style.display = "block";
+        return;
+      } else {
+        // Hide rename button if it was previously shown
+        document.getElementById("renameButton").style.display = "none";
       }
 
       // Show uploading status
@@ -360,7 +397,7 @@
           
           const text = await response.text();
           
-          if (text.toLowerCase().includes("success") || response.ok) {
+          if (text.toLowerCase().includes("success")) {
             showStatus(text, "success", 100);
             // Reset form after successful upload
             document.getElementById("fileInput").value = '';
@@ -406,6 +443,32 @@
         }
       }
     }, false);
+    
+    // Add functionality for rename button
+    document.getElementById("renameButton").addEventListener("click", function() {
+      const fileInput = document.getElementById("fileInput");
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        
+        // Create a new File object with timestamped name
+        const newFilename = getTimestampedFilename(file.name);
+        const newFile = new File([file], newFilename, {type: file.type});
+        
+        // Create a DataTransfer to set the files property
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(newFile);
+        fileInput.files = dataTransfer.files;
+        
+        // Update the displayed filename
+        document.getElementById("selectedFileName").textContent = newFilename;
+        
+        // Hide rename button and enable submit
+        this.style.display = "none";
+        document.getElementById("submitButton").disabled = false;
+        
+        showStatus(`File renamed to "${newFilename}". Ready to upload.`, "info");
+      }
+    });
   </script>
 </body>
 </html>
